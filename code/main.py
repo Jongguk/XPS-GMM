@@ -4,21 +4,13 @@ import numpy as np
 from sklearn.mixture import GaussianMixture
 
 random_state = np.random
-
-X = np.concatenate([random_state.normal(-0.3, 2, 550),
-                    random_state.normal(0, 1, 300), 
-                    random_state.normal(1, 0.5, 150)]).reshape(-1, 1)
+X = np.concatenate([random_state.normal(-0.8, 2, 550),
+                    random_state.normal(0.3, 2, 300), 
+                    random_state.normal(2, 1.5, 150)]).reshape(-1, 1)
 random_state = np.random
 Y = np.concatenate([random_state.normal(-0.2, 1.2, 450),
                     random_state.normal(0, 1.4, 400), 
-                    random_state.normal(1, 1, 350)]).reshape(-1, 1)
-random_state = np.random
-X2 = np.concatenate([random_state.normal(-0.2, 1.5, 350),
-                    random_state.normal(0, 1, 500), 
-                    random_state.normal(1, 0.5, 150)]).reshape(-1, 1)
-Y2 = np.concatenate([random_state.normal(-0.8, 1.2, 450),
-                    random_state.normal(1.2, 0.8, 200), 
-                    random_state.normal(1.5, 0.4, 550)]).reshape(-1, 1)
+                    random_state.normal(2, 1, 350)]).reshape(-1, 1)
 
 XN = np.arange(1, 11)
 X_models = [None for i in range(len(XN))]
@@ -27,13 +19,14 @@ for i in range(len(XN)):
     X_models[i] = GaussianMixture(XN[i]).fit(X)
 
 x_AIC = [m.aic(X) for m in X_models]
+print(x_AIC)
 # BIC = [m.bic(X) for m in models]
 
 fig = plt.figure(figsize=(10, 5))
 fig.subplots_adjust(left=0.12, right=0.97, bottom=0.21, top=0.9, wspace=0.5)
-
 ax = fig.add_subplot(121) # (1x3) 짜리 그래프에 1번째 자리에 plot
-X_M_best = X_models[np.argmin(x_AIC)]
+
+X_M_best = X_models[np.argmin(x_AIC)] # argmin(AIC)
 
 x =np.linspace(-10, 10, 1000)
 x_logprob = X_M_best.score_samples(x.reshape(-1,1))
